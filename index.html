@@ -16,8 +16,8 @@
     }
     #trustindex-container {
       position: absolute;
-      top: 142px; /* (3840px - 3456px) / 2 to center vertically */
-      left: 720px; /* (2160px - 720px) / 2 to center horizontally */
+      top: 192px; /* Adjusted to (3840px - 3456px) / 2 for true center */
+      left: 720px; /* (2160px - 720px) / 2 */
       width: 720px; /* 33.33% of 2160px */
       height: 3456px; /* 90% of 3840px */
       text-align: center;
@@ -25,12 +25,13 @@
       justify-content: center;
       align-items: center;
       font-size: 3em;
-      transform: scale(2);
+      /* Removed transform: scale(2) to avoid clipping, will use larger font instead */
       transform-origin: center;
-      overflow: auto;
+      overflow: visible; /* Changed to visible to ensure content shows */
+      border: 2px solid red; /* Debugging border to see the container */
     }
     #trustindex-container * {
-      font-size: inherit !important;
+      font-size: 2.5em !important; /* Reduced slightly for visibility */
       line-height: 1.2 !important;
       max-width: 100% !important;
       box-sizing: border-box !important;
@@ -45,6 +46,8 @@
 <body>
   <div id="trustindex-container">
     <script defer async src='https://cdn.trustindex.io/loader.js?6b641f854b9c31983e46f7e42c9'></script>
+    <!-- Debugging text if script fails -->
+    <p style="color: white;">If you see this, the script didn't load.</p>
   </div>
 </body>
 </html>
