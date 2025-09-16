@@ -8,25 +8,38 @@
       width: 1920px;
       height: 1080px;
       background: url('background.jpg') no-repeat center center;
-      background-size: contain; /* Ensures image fits within display size */
+      background-size: contain; /* Fits within display size */
       overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
+      /* Fallback background color if image fails */
+      background-color: #f0f0f0;
     }
     #trustindex-container {
       position: relative;
       width: 33.33%;
-      height: 80%; /* Stretched vertically */
+      height: 90%; /* Increased further for vertical stretch */
       text-align: center;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 2em;
-      transform: scale(1.5);
+      font-size: 3em; /* Increased font size */
+      transform: scale(2); /* Increased scaling */
       transform-origin: center;
+      /* Ensure Trustindex content respects our sizing */
+      overflow: auto;
     }
     #trustindex-container * {
+      font-size: inherit !important;
+      line-height: 1.2 !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    /* Target Trustindex-specific classes if needed (adjust based on inspection) */
+    .ti-widget, .ti-review {
+      width: 100% !important;
+      height: 100% !important;
       font-size: inherit !important;
     }
   </style>
