@@ -5,10 +5,10 @@
     body {
       margin: 0;
       padding: 0;
-      width: 1920px;
-      height: 1080px;
+      width: 1080px;
+      height: 1920px;
       background: url('background.jpg') no-repeat center center;
-      background-size: contain; /* Fits within display size */
+      background-size: cover; /* Fills the screen, cropping if needed */
       overflow: hidden;
       display: flex;
       justify-content: center;
@@ -19,15 +19,14 @@
     #trustindex-container {
       position: relative;
       width: 33.33%;
-      height: 90%; /* Increased further for vertical stretch */
+      height: 90%; /* Stretched vertically */
       text-align: center;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 3em; /* Increased font size */
-      transform: scale(2); /* Increased scaling */
+      font-size: 3em;
+      transform: scale(2);
       transform-origin: center;
-      /* Ensure Trustindex content respects our sizing */
       overflow: auto;
     }
     #trustindex-container * {
@@ -36,7 +35,6 @@
       max-width: 100% !important;
       box-sizing: border-box !important;
     }
-    /* Target Trustindex-specific classes if needed (adjust based on inspection) */
     .ti-widget, .ti-review {
       width: 100% !important;
       height: 100% !important;
