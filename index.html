@@ -1,36 +1,27 @@
-<div class="review-page-container">
-  <div class="review-card">
-    <!-- Diagonal stripe backgrounds -->
-    <div class="stripe-left"></div>
-    <div class="stripe-bottom"></div>
-    
-    <!-- Photo placeholder (top-left square) -->
-    <div class="photo-placeholder">
-      <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjRkZGNkYwIi8+Cjx0ZXh0IHg9IjMyIiB5PSIzNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iIGZpbGw9IiNGRjY2MDAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZm9udC13ZWlnaHQ9ImJvbGQiPkA8L3RleHQ+Cjwvc3ZnPgo=" alt="Reviewer Photo" width="64" height="64">
-    </div>
-    
-    <!-- Title -->
-    <h2 class="review-title">Client Review</h2>
-    
-    <!-- Stars (will be overridden by Trustindex if present; static fallback) -->
-    <div class="stars-container">
-      <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
-    </div>
-    
-    <!-- Trustindex Widget Container (script loads review here) -->
-    <div class="widget-container">
-      <div id="ti-review-widget">
-        <script defer async src='https://cdn.trustindex.io/loader.js?6b641f854b9c31983e46f7e42c9'></script>
-      </div>
-    </div>
-    
-    <!-- Fallback static text (remove if widget loads perfectly; hidden by default) -->
-    <div class="static-review" style="display: none;">
-      <p>Communication was perfect. She was also very responsive to our revisions.</p>
-      <p>We got some really great designs as a test run and we will be working with her again for future designs! We feel very confident in her ability to deliver high-quality work!</p>
-    </div>
-    
-    <!-- Name (will be overridden by Trustindex) -->
-    <div class="reviewer-name">Donna Stroupe</div>
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      background: url('background.png') no-repeat center center fixed;
+      background-size: cover;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #trustindex-container {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="trustindex-container">
+    <script defer async src='https://cdn.trustindex.io/loader.js?6b641f854b9c31983e46f7e42c9'></script>
   </div>
-</div>
+</body>
+</html>
