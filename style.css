@@ -1,0 +1,177 @@
+/* Full-page setup for 720p digital signage */
+body.custom-review-page {
+  margin: 0;
+  padding: 0;
+  background: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.review-page-container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.review-card {
+  background: white;
+  width: 80%; /* Scales to ~1024px on 1280p; adjust for fit */
+  max-width: 600px;
+  height: 70%; /* Fits 720p height */
+  padding: 40px;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+/* Diagonal stripes */
+.stripe-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100%;
+  background: linear-gradient(135deg, #FF6600 0%, #003366 50%, #FF6600 100%);
+  transform: skewY(-15deg);
+  z-index: 1;
+}
+
+.stripe-bottom {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(45deg, #003366 0%, #FF6600 50%, #003366 100%);
+  transform: skewX(15deg);
+  z-index: 1;
+}
+
+/* Photo placeholder */
+.photo-placeholder {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 2;
+}
+
+.photo-placeholder img {
+  border: 3px solid #FF6600;
+  border-radius: 4px;
+  background: white;
+}
+
+/* Title */
+.review-title {
+  color: #003366;
+  font-size: 28px;
+  font-weight: bold;
+  margin: 80px 0 10px 0;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* Stars */
+.stars-container {
+  text-align: center;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.star {
+  color: #FF6600;
+  font-size: 24px;
+}
+
+/* Widget container (Trustindex injects here) */
+.widget-container {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  min-height: 150px; /* Space for review text */
+  margin-bottom: 20px;
+}
+
+/* Trustindex overrides (adjust selectors based on your widget's inspection) */
+#ti-review-widget,
+.ti-widget,
+.ti-review {
+  color: #003366 !important;
+  font-size: 16px;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.ti-review-text,
+.ti-review p {
+  color: #003366 !important;
+  margin: 0 0 10px 0;
+}
+
+.ti-review-star,
+.ti-star {
+  color: #FF6600 !important;
+  font-size: 20px;
+}
+
+.ti-review-author,
+.ti-reviewer-name {
+  color: #003366 !important;
+  font-weight: bold;
+  font-size: 18px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.ti-review-authorimg,
+.ti-author-img {
+  border: 3px solid #FF6600 !important;
+  border-radius: 4px;
+}
+
+/* Fallback static review (hidden if widget loads) */
+.static-review p {
+  color: #003366;
+  font-size: 16px;
+  margin: 0 0 10px 0;
+  text-align: left;
+}
+
+/* Reviewer name */
+.reviewer-name {
+  color: #003366;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  margin-top: 10px;
+}
+
+/* Responsive for 720p */
+@media (max-width: 1280px) and (max-height: 720px) {
+  .review-card {
+    width: 90%;
+    height: 85%;
+    padding: 20px;
+  }
+  
+  .review-title {
+    font-size: 24px;
+    margin-top: 60px;
+  }
+  
+  .star {
+    font-size: 20px;
+  }
+}
