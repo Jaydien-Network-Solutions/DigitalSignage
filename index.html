@@ -8,7 +8,7 @@
       width: 2160px;
       height: 3840px;
       background: url('background.jpg') no-repeat center center;
-      background-size: cover; /* Fills the 2160x3840 screen */
+      background-size: cover; /* Should fill 2160x3840, cropping if needed */
       overflow: hidden;
       position: relative; /* Context for absolute positioning */
       /* Fallback background color */
@@ -16,7 +16,7 @@
     }
     #trustindex-container {
       position: absolute;
-      top: 192px; /* Adjusted to (3840px - 3456px) / 2 for true center */
+      top: 192px; /* (3840px - 3456px) / 2 */
       left: 720px; /* (2160px - 720px) / 2 */
       width: 720px; /* 33.33% of 2160px */
       height: 3456px; /* 90% of 3840px */
@@ -25,13 +25,12 @@
       justify-content: center;
       align-items: center;
       font-size: 3em;
-      /* Removed transform: scale(2) to avoid clipping, will use larger font instead */
       transform-origin: center;
-      overflow: visible; /* Changed to visible to ensure content shows */
-      border: 2px solid red; /* Debugging border to see the container */
+      overflow: visible; /* Ensures content is visible */
+      border: 2px solid red; /* Debugging border */
     }
     #trustindex-container * {
-      font-size: 2.5em !important; /* Reduced slightly for visibility */
+      font-size: 2.5em !important; /* Adjusted for visibility */
       line-height: 1.2 !important;
       max-width: 100% !important;
       box-sizing: border-box !important;
