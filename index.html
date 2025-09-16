@@ -8,7 +8,7 @@
       width: 2160px;
       height: 3840px;
       background: url('background.jpg') no-repeat center center;
-      background-size: cover; /* Should fill 2160x3840, cropping if needed */
+      background-size: cover; /* Fills the 2160x3840 screen */
       overflow: hidden;
       position: relative; /* Context for absolute positioning */
       /* Fallback background color */
@@ -16,29 +16,25 @@
     }
     #trustindex-container {
       position: absolute;
-      top: 192px; /* (3840px - 3456px) / 2 */
-      left: 720px; /* (2160px - 720px) / 2 */
-      width: 720px; /* 33.33% of 2160px */
-      height: 3456px; /* 90% of 3840px */
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%); /* Centers both vertically and horizontally */
       text-align: center;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 3em;
-      transform-origin: center;
+      /* Removed width, height, font-size, and transform to let Trustindex size naturally */
       overflow: visible; /* Ensures content is visible */
       border: 2px solid red; /* Debugging border */
     }
     #trustindex-container * {
-      font-size: 2.5em !important; /* Adjusted for visibility */
+      /* Removed font-size override to let Trustindex style naturally */
       line-height: 1.2 !important;
       max-width: 100% !important;
       box-sizing: border-box !important;
     }
     .ti-widget, .ti-review {
-      width: 100% !important;
-      height: 100% !important;
-      font-size: inherit !important;
+      /* Removed width, height, and font-size overrides */
     }
   </style>
 </head>
