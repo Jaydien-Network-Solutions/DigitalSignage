@@ -8,16 +8,17 @@
       width: 1080px;
       height: 1920px;
       background: url('background.jpg') no-repeat center center;
-      background-size: cover; /* Fills the screen, cropping if needed */
+      background-size: cover; /* Fills the 1080x1920 screen */
       overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      position: relative; /* Added for absolute positioning context */
       /* Fallback background color if image fails */
       background-color: #f0f0f0;
     }
     #trustindex-container {
-      position: relative;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%); /* Centers both vertically and horizontally */
       width: 33.33%;
       height: 90%; /* Stretched vertically */
       text-align: center;
