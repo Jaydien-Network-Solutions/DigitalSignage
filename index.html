@@ -5,17 +5,28 @@
     body {
       margin: 0;
       padding: 0;
-      width: 100vw;
-      height: 100vh;
-      background: url('background.png') no-repeat center center fixed;
+      width: 1080px;
+      height: 1920px;
+      background: url('background.png') no-repeat center center;
       background-size: cover;
       overflow: hidden;
+      transform: rotate(90deg) translateY(-1080px);
+      transform-origin: top left;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    #trustindex-container {
+      position: absolute;
+      top: 33.33%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 33.33%;
+      text-align: center;
+      height: 33.33%; /* Optional: Limits vertical space if needed */
       display: flex;
       justify-content: center;
       align-items: center;
-    }
-    #trustindex-container {
-      text-align: center;
     }
   </style>
 </head>
