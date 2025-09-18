@@ -23,27 +23,28 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100px; /* Minimum height to ensure visibility */
-      min-width: 300px; /* Minimum width to ensure visibility */
+      min-height: 600px; /* Increased from 100px for larger size */
+      min-width: 800px; /* Increased from 300px for larger size */
       overflow: visible; /* Ensures content is visible */
       border: 2px solid red; /* Debugging border */
-      background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent background for visibility */
+      background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent background */
     }
     #trustindex-container * {
+      font-size: 3em !important; /* Increased for larger text */
       line-height: 1.2 !important;
       max-width: 100% !important;
       box-sizing: border-box !important;
     }
     .ti-widget, .ti-review {
-      /* No overrides to let Trustindex style naturally */
+      /* No overrides to let Trustindex style naturally, but will inherit font-size */
     }
   </style>
 </head>
 <body>
   <div id="trustindex-container">
     <script defer async src='https://cdn.trustindex.io/loader.js?6b641f854b9c31983e46f7e42c9'></script>
-    <!-- Enhanced debugging text -->
-    <p style="color: white; z-index: 10;">If you see this, the Trustindex script didn't load. Check console for errors.</p>
+    <!-- Debugging text if script fails -->
+    <p style="color: white; z-index: 10;">If you see this, the Trustindex script didn't load.</p>
   </div>
 </body>
 </html>
