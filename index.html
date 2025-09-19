@@ -19,24 +19,27 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%); /* Centers both vertically and horizontally */
+      width: 1280px; /* Fixed width as requested */
+      height: 1280px; /* Fixed height as requested */
       text-align: center;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 600px; /* Increased from 100px for larger size */
-      min-width: 800px; /* Increased from 300px for larger size */
       overflow: visible; /* Ensures content is visible */
       border: 2px solid red; /* Debugging border */
       background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent background */
     }
     #trustindex-container * {
-      font-size: 3em !important; /* Increased for larger text */
+      font-size: 3em !important; /* Increased for larger text to fill the div */
       line-height: 1.2 !important;
       max-width: 100% !important;
+      max-height: 100% !important; /* Ensures content fills height */
       box-sizing: border-box !important;
     }
     .ti-widget, .ti-review {
-      /* No overrides to let Trustindex style naturally, but will inherit font-size */
+      width: 100% !important; /* Fills the container width */
+      height: 100% !important; /* Fills the container height */
+      font-size: inherit !important; /* Inherits the increased font size */
     }
   </style>
 </head>
