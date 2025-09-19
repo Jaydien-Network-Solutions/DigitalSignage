@@ -19,18 +19,18 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%); /* Centers both vertically and horizontally */
-      width: 1200px; /* Increased to 1200px */
-      height: 1200px; /* Increased to 1200px */
+      width: 1200px; /* Kept at 1200px */
+      height: 1600px; /* Increased to 1600px as requested */
       text-align: center;
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden; /* Clips content exceeding 1200x1200px */
-      border: 2px solid red; /* Debugging border */
+      overflow: hidden; /* Clips content exceeding 1200x1600px */
+      /* Removed border: 2px solid red; as requested */
       background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent background */
     }
     #trustindex-container * {
-      font-size: 1em !important; /* Reduced from 1.5em to fit content better */
+      font-size: 1em !important; /* Kept to fit content better */
       line-height: 1.2 !important;
       max-width: 100% !important;
       max-height: 100% !important; /* Caps content height */
@@ -39,7 +39,7 @@
     .ti-widget, .ti-review {
       width: 100% !important; /* Fills the container width */
       height: 100% !important; /* Fills the container height */
-      font-size: inherit !important; /* Inherits the reduced font size */
+      font-size: inherit !important; /* Inherits the adjusted font size */
       max-width: 100% !important; /* Ensures no overflow */
       max-height: 100% !important; /* Ensures no overflow */
       box-sizing: border-box !important;
@@ -49,7 +49,7 @@
 </head>
 <body>
   <div id="trustindex-container">
-  <script defer async src='https://cdn.trustindex.io/loader.js?4011090549a3502cad466b9f376'></script>
+    <script defer async src='https://cdn.trustindex.io/loader.js?6b641f854b9c31983e46f7e42c9'></script>
     <!-- Debugging text if script fails -->
     <p style="color: white; z-index: 10;">If you see this, the Trustindex script didn't load.</p>
   </div>
