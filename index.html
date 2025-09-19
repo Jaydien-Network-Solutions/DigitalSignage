@@ -19,18 +19,18 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%); /* Centers both vertically and horizontally */
-      width: 600px; /* Fixed width */
-      height: 600px; /* Fixed height */
+      width: 800px; /* Increased to 800px */
+      height: 800px; /* Increased to 800px */
       text-align: center;
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden; /* Clips content exceeding 600x600px */
+      overflow: hidden; /* Clips content exceeding 800x800px */
       border: 2px solid red; /* Debugging border */
       background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent background */
     }
     #trustindex-container * {
-      font-size: 1.5em !important; /* Controlled size to fit */
+      font-size: 1em !important; /* Reduced from 1.5em to fit content better */
       line-height: 1.2 !important;
       max-width: 100% !important;
       max-height: 100% !important; /* Caps content height */
@@ -39,7 +39,7 @@
     .ti-widget, .ti-review {
       width: 100% !important; /* Fills the container width */
       height: 100% !important; /* Fills the container height */
-      font-size: inherit !important; /* Inherits the controlled font size */
+      font-size: inherit !important; /* Inherits the reduced font size */
       max-width: 100% !important; /* Ensures no overflow */
       max-height: 100% !important; /* Ensures no overflow */
       box-sizing: border-box !important;
@@ -50,9 +50,8 @@
 <body>
   <div id="trustindex-container">
     <script defer async src='https://cdn.trustindex.io/loader.js?6b641f854b9c31983e46f7e42c9'></script>
-    <!-- Enhanced debugging text -->
-    <p style="color: white; z-index: 10;">If you see this, the Trustindex script didn't load. Check console.</p>
-    <p style="color: white; z-index: 10;">Container size: 600x600px</p>
+    <!-- Debugging text if script fails -->
+    <p style="color: white; z-index: 10;">If you see this, the Trustindex script didn't load.</p>
   </div>
 </body>
 </html>
