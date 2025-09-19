@@ -19,18 +19,18 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%); /* Centers both vertically and horizontally */
-      width: 1000px; /* Increased to 1000px */
-      height: 1000px; /* Increased to 1000px */
+      width: 1200px; /* Increased to 1200px */
+      height: 1200px; /* Increased to 1200px */
       text-align: center;
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden; /* Clips content exceeding 1000x1000px */
+      overflow: hidden; /* Clips content exceeding 1200x1200px */
       border: 2px solid red; /* Debugging border */
       background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent background */
     }
     #trustindex-container * {
-      font-size: 1.5em !important; /* Adjusted to fit the larger div */
+      font-size: 1em !important; /* Reduced from 1.5em to fit content better */
       line-height: 1.2 !important;
       max-width: 100% !important;
       max-height: 100% !important; /* Caps content height */
@@ -39,7 +39,7 @@
     .ti-widget, .ti-review {
       width: 100% !important; /* Fills the container width */
       height: 100% !important; /* Fills the container height */
-      font-size: inherit !important; /* Inherits the adjusted font size */
+      font-size: inherit !important; /* Inherits the reduced font size */
       max-width: 100% !important; /* Ensures no overflow */
       max-height: 100% !important; /* Ensures no overflow */
       box-sizing: border-box !important;
