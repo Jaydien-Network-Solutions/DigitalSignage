@@ -25,33 +25,34 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: auto; /* Adds scroll if content exceeds size */
+      overflow: hidden; /* Clips content exceeding 600x600px */
       border: 2px solid red; /* Debugging border */
       background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent background */
     }
     #trustindex-container * {
-      font-size: 1.5em !important; /* Reduced to fit content within 600x600px */
+      font-size: 1.5em !important; /* Controlled size to fit */
       line-height: 1.2 !important;
       max-width: 100% !important;
       max-height: 100% !important; /* Caps content height */
       box-sizing: border-box !important;
-      transform: scale(1); /* Resets any scaling */
     }
     .ti-widget, .ti-review {
       width: 100% !important; /* Fills the container width */
       height: 100% !important; /* Fills the container height */
-      font-size: inherit !important; /* Inherits the reduced font size */
+      font-size: inherit !important; /* Inherits the controlled font size */
       max-width: 100% !important; /* Ensures no overflow */
       max-height: 100% !important; /* Ensures no overflow */
       box-sizing: border-box !important;
+      overflow: hidden !important; /* Forces content to stay within bounds */
     }
   </style>
 </head>
 <body>
   <div id="trustindex-container">
     <script defer async src='https://cdn.trustindex.io/loader.js?6b641f854b9c31983e46f7e42c9'></script>
-    <!-- Debugging text if script fails -->
-    <p style="color: white; z-index: 10;">If you see this, the Trustindex script didn't load.</p>
+    <!-- Enhanced debugging text -->
+    <p style="color: white; z-index: 10;">If you see this, the Trustindex script didn't load. Check console.</p>
+    <p style="color: white; z-index: 10;">Container size: 600x600px</p>
   </div>
 </body>
 </html>
