@@ -56,10 +56,10 @@
     }
     #stats-div {
       position: absolute;
-      top: 80%; /* Moved down slightly */
-      left: 5%; /* Left justified */
+      top: 75%; /* Moved down slightly */
+      left: 10%; /* Left justified */
       transform: translateX(0); /* Removed centering transform */
-      width: 1700px; /* Wider */
+      width: 1800px; /* Wider */
       text-align: left;
       color: #000000; /* Black */
       font-size: 48px; /* Reduced proportionally (80% of 60px) */
@@ -90,6 +90,7 @@
       background-color: #eceeef; /* Unfilled part */
       position: relative;
       margin-right: 10px; /* Space before percentage */
+      overflow: hidden; /* Ensure fill stays within bounds */
     }
     .rating-bar .fill {
       height: 100%;
@@ -98,7 +99,8 @@
       position: absolute;
       top: 0;
       left: 0;
-      width: 0; /* Will be set via inline style */
+      width: 0; /* Will be set via inline style, fallback to 0 */
+      min-width: 0; /* Prevent collapse */
     }
     .overall-rating {
       margin-top: 12px; /* Reduced proportionally */
@@ -278,15 +280,21 @@
       const statsDiv = document.getElementById('stats-div');
       const totalReviews = placeData.user_ratings_total || 'N/A';
       const avgRating = placeData.rating ? placeData.rating.toFixed(1) : 'N/A'; // Use original rating with decimal
-      const distribution = estimateRatingDistribution(totalReviews, avgRating);
-      const ratings = distribution.match(/\d+/g); // Extract counts [5, 4, 3, 2, 1]
+      // Hardcoded distribution from Trustindex for accuracy
+      const hardcodedDistribution = {
+        5: { percent: 97, count: 292 },
+        4: { percent: 2, count: 7 },
+        3: { percent: 0, count: 0 },
+        2: { percent: 0, count: 1 },
+        1: { percent: 1, count: 2 }
+      };
       statsDiv.innerHTML = `
         <h1>Ratings Breakdown - based out of ${totalReviews} reviews</h1>
-        <div class="rating-line"><span class="rating-text">5 star</span><div class="rating-bar" style="width: 100%;"><div class="fill" style="width: ${ratings ? (ratings[0] / totalReviews * 100) || 0 : 0}%;"></div></div><span class="rating-text">${ratings ? `${(ratings[0] / totalReviews * 100).toFixed(0)}% (${ratings[0]})` : 'N/A'}</span></div>
-        <div class="rating-line"><span class="rating-text">4 star</span><div class="rating-bar" style="width: 100%;"><div class="fill" style="width: ${ratings ? (ratings[1] / totalReviews * 100) || 0 : 0}%;"></div></div><span class="rating-text">${ratings ? `${(ratings[1] / totalReviews * 100).toFixed(0)}% (${ratings[1]})` : 'N/A'}</span></div>
-        <div class="rating-line"><span class="rating-text">3 star</span><div class="rating-bar" style="width: 100%;"><div class="fill" style="width: ${ratings ? (ratings[2] / totalReviews * 100) || 0 : 0}%;"></div></div><span class="rating-text">${ratings ? `${(ratings[2] / totalReviews * 100).toFixed(0)}% (${ratings[2]})` : 'N/A'}</span></div>
-        <div class="rating-line"><span class="rating-text">2 star</span><div class="rating-bar" style="width: 100%;"><div class="fill" style="width: ${ratings ? (ratings[3] / totalReviews * 100) || 0 : 0}%;"></div></div><span class="rating-text">${ratings ? `${(ratings[3] / totalReviews * 100).toFixed(0)}% (${ratings[3]})` : 'N/A'}</span></div>
-        <div class="rating-line"><span class="rating-text">1 star</span><div class="rating-bar" style="width: 100%;"><div class="fill" style="width: ${ratings ? (ratings[4] / totalReviews * 100) || 0 : 0}%;"></div></div><span class="rating-text">${ratings ? `${(ratings[4] / totalReviews * 100).toFixed(0)}% (${ratings[4]})` : 'N/A'}</span></div>
+        <div class="rating-line"><span class="rating-text">5 star</span><div class="rating-bar" style="width: 100%;"><div class="fill" style="width: ${hardcodedDistribution[5].percent}%; min-width: 1px;"></div></div><span class="rating-text">${hardcodedDistribution[5].percent}% (${hardcodedDistribution[5].count})</span></div>
+        <div class="rating-line"><span class="rating-text">4 star</span><div class="rating-bar" style="width: 100%;"><div class="fill" style="width: ${hardcodedDistribution[4].percent}%; min-width: 1px;"></div></div><span class="rating-text">${hardcodedDistribution[4].percent}% (${hardcodedDistribution[4].count})</span></div>
+        <div class="rating-line"><span class="rating-text">3 star</span><div class="rating-bar" style="width: 100%;"><div class="fill" style="width: ${hardcodedDistribution[3].percent}%; min-width: 1px;"></div></div><span class="rating-text">${hardcodedDistribution[3].percent}% (${hardcodedDistribution[3].count})</span></div>
+        <div class="rating-line"><span class="rating-text">2 star</span><div class="rating-bar" style="width: 100%;"><div class="fill" style="width: ${hardcodedDistribution[2].percent}%; min-width: 1px;"></div></div><span class="rating-text">${hardcodedDistribution[2].percent}% (${hardcodedDistribution[2].count})</span></div>
+        <div class="rating-line"><span class="rating-text">1 star</span><div class="rating-bar" style="width: 100%;"><div class="fill" style="width: ${hardcodedDistribution[1].percent}%; min-width: 1px;"></div></div><span class="rating-text">${hardcodedDistribution[1].percent}% (${hardcodedDistribution[1].count})</span></div>
         <div class="overall-rating">
           <div class="overall-rating-text">${avgRating !== 'N/A' ? `${avgRating} EXCELLENT rating` : 'N/A'}</div>
           <div class="star-rating">
@@ -316,24 +324,7 @@
       }
     }
 
-    function estimateRatingDistribution(totalReviews, avgRating) {
-      if (!totalReviews || !avgRating || totalReviews < 0 || avgRating < 0 || avgRating > 5) return 'N/A';
-      const ratings = [0, 0, 0, 0, 0];
-      const mean = parseFloat(avgRating);
-      const stdDev = 1.0;
-      const total = parseInt(totalReviews);
-      for (let i = 1; i <= 5; i++) {
-        const zScore = (i - mean) / stdDev;
-        const probability = 1 / (stdDev * Math.sqrt(2 * Math.PI)) * Math.exp(-0.5 * zScore * zScore);
-        ratings[i - 1] = Math.round(probability * total / 5);
-      }
-      const sum = ratings.reduce((a, b) => a + b, 0);
-      if (sum !== total) {
-        const diff = total - sum;
-        ratings[4] += diff;
-      }
-      return `5 star: ${ratings[4]}, 4 star: ${ratings[3]}, 3 star: ${ratings[2]}, 2 star: ${ratings[1]}, 1 star: ${ratings[0]}`;
-    }
+    // Removed estimateRatingDistribution since we're using hardcoded data
 
     window.initMap = initMap;
   </script>
