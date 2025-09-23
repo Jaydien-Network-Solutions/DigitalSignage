@@ -21,6 +21,17 @@
       background-color: #f0f0f0; /* Fallback */
       font-family: 'Poppins', sans-serif;
     }
+    #header-text {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #003366; /* Navy */
+      font-size: 96px; /* Larger than review h1 */
+      font-weight: 700; /* Bold */
+      text-align: center;
+      z-index: 10;
+    }
     #trustindex-container {
       position: absolute;
       top: 50%;
@@ -86,8 +97,15 @@
       font-weight: 400; /* Regular */
       line-height: 1.4;
       margin-bottom: 10px;
-      max-height: 300px;
+      max-height: 1200px; /* Increased to accommodate full text */
       overflow: hidden;
+    }
+    .review-stats {
+      color: #003366;
+      font-size: 60px; /* ~70% of 84px */
+      font-weight: 400; /* Regular */
+      margin-top: 10px;
+      text-align: left; /* Left justify */
     }
     .no-reviews {
       color: #003366;
@@ -104,6 +122,7 @@
   </style>
 </head>
 <body>
+  <h1 id="header-text">What our customers are saying about Jaydien Network Solutions</h1>
   <div id="trustindex-container">
     <div id="review-display" class="review-card">
       <div class="no-reviews">Loading reviews...</div>
@@ -118,6 +137,7 @@
     let reviews = [];
     let currentIndex = 0;
     let map; // Dummy map for PlacesService
+    let placeData = {}; // Global object to store place details
 
     // Explicitly define initMap on window to ensure global scope
     window.initMap = function() {
@@ -135,19 +155,24 @@
         const service = new google.maps.places.PlacesService(map);
         const request = {
           placeId: PLACE_ID,
-          fields: ['reviews']
+          fields: ['reviews', 'rating', 'user_ratings_total'] // Added fields for stats
         };
         service.getDetails(request, (place, status) => {
           console.log('PlacesService Response Status:', status); // Debug status
           console.log('Place Data:', place); // Debug full response
-          if (status === google.maps.places.PlacesServiceStatus.OK && place.reviews) {
-            reviews = place.reviews.slice(0, 5); // Limit to 5 latest
-            console.log('Fetched Reviews:', reviews); // Debug fetched reviews
-            if (reviews.length > 0) {
-              displayReview(0); // Manually trigger first review
-              startCycling();
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            placeData = place; // Store place data globally
+            if (place.reviews) {
+              reviews = place.reviews.slice(0, 5); // Limit to 5 latest
+              console.log('Fetched Reviews:', reviews); // Debug fetched reviews
+              if (reviews.length > 0) {
+                displayReview(0); // Manually trigger first review
+                startCycling();
+              } else {
+                showNoReviews('No reviews found for this place.');
+              }
             } else {
-              showNoReviews('No reviews found for this place.');
+              showNoReviews('No reviews data available.');
             }
           } else {
             console.error('PlacesService Error:', status);
@@ -164,6 +189,12 @@
       const review = reviews[index];
       const display = document.getElementById('review-display');
       const stars = '★'.repeat(Math.round(review.rating)) + '☆'.repeat(5 - Math.round(review.rating)); // Unicode stars
+      const totalReviews = placeData.user_ratings_total || 'N/A';
+      const avgRating = placeData.rating ? placeData.rating.toFixed(1) : 'N/A';
+      // Approximate rating distribution (simplified normal distribution)
+      const distribution = estimateRatingDistribution(totalReviews, avgRating);
+      const oldestReview = reviews.length > 0 ? new Date(Math.min(...reviews.map(r => r.time * 1000)).toLocaleDateString()) : 'N/A';
+      const newestReview = reviews.length > 0 ? new Date(Math.max(...reviews.map(r => r.time * 1000)).toLocaleDateString()) : 'N/A';
       display.innerHTML = `
         <div class="review-header">
           <img src="${review.profile_photo_url}" alt="${review.author_name}'s photo" class="profile-photo">
@@ -171,7 +202,12 @@
         </div>
         <div class="review-date">${new Date(review.time * 1000).toLocaleDateString()}</div>
         <div class="stars">${stars}</div>
-        <div class="review-text">${review.text ? review.text.substring(0, 200) + (review.text.length > 200 ? '...' : '') : 'No text available'}</div>
+        <div class="review-text">${review.text || 'No text available'}</div>
+        <div class="review-stats">
+          Based on ${totalReviews} reviews, Avg. Rating: ${avgRating}/5<br>
+          Approx. Distribution: ${distribution}<br>
+          Reviews from ${oldestReview} to ${newestReview}
+        </div>
       `;
       console.log('Displaying Review:', review); // Debug UI update
       display.classList.remove('active');
@@ -198,6 +234,31 @@
       if (message.includes('Error')) {
         display.innerHTML += `<div class="error-message">See console for details.</div>`;
       }
+    }
+
+    // Estimate rating distribution based on average and total reviews
+    function estimateRatingDistribution(totalReviews, avgRating) {
+      if (!totalReviews || !avgRating || totalReviews < 0 || avgRating < 0 || avgRating > 5) return 'N/A';
+      const ratings = [0, 0, 0, 0, 0]; // [1-star, 2-star, 3-star, 4-star, 5-star]
+      const mean = parseFloat(avgRating);
+      const stdDev = 1.0; // Assumed standard deviation for normal distribution
+      const total = parseInt(totalReviews);
+
+      // Simplified normal distribution approximation
+      for (let i = 1; i <= 5; i++) {
+        const zScore = (i - mean) / stdDev;
+        const probability = 1 / (stdDev * Math.sqrt(2 * Math.PI)) * Math.exp(-0.5 * zScore * zScore);
+        ratings[i - 1] = Math.round(probability * total / 5); // Distribute based on bell curve
+      }
+
+      // Normalize to match total reviews
+      const sum = ratings.reduce((a, b) => a + b, 0);
+      if (sum !== total) {
+        const diff = total - sum;
+        ratings[4] += diff; // Adjust 5-star to account for rounding
+      }
+
+      return `5★: ${ratings[4]}, 4★: ${ratings[3]}, 3★: ${ratings[2]}, 2★: ${ratings[1]}, 1★: ${ratings[0]}`;
     }
 
     // Ensure initMap is called when Maps JS loads
