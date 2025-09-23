@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jaydien Network Solutions Reviews</title>
+  <!-- Load Google Maps JS Library (client-side, CORS-safe) -->
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBx0z3cr0aK2dIMjQyGhdZqHxtNO6Tx3Xg&libraries=places"></script>
   <style>
     body {
       margin: 0;
@@ -80,6 +82,11 @@
       font-size: 28px;
       text-align: center;
     }
+    .error-message {
+      color: red;
+      font-size: 24px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -90,50 +97,63 @@
   </div>
 
   <script>
-    // Configuration - Replace with your values
-    const API_KEY = 'AIzaSyBx0z3cr0aK2dIMjQyGhdZqHxtNO6Tx3Xg'; // Get from Google Cloud Console
-    const PLACE_ID = 'ChIJ4zvzQkiDwYkReyhlC33LZfs'; // Get from Google Maps URL (e.g., 0x89c3b7f0a0b0b0b0:0x1234567890abcdef)
+    // Configuration
+    const API_KEY = 'AIzaSyBx0z3cr0aK2dIMjQyGhdZqHxtNO6Tx3Xg'; // Your API key
+    const PLACE_ID = 'ChIJ4zvzQkiDwYkReyhlC33LZfs'; // Your Place ID
     const CYCLE_INTERVAL = 5000; // 5 seconds in ms
-
     let reviews = [];
     let currentIndex = 0;
+    let map; // Dummy map for PlacesService
+
+    function initMap() {
+      // Create a dummy invisible map to initialize PlacesService
+      map = new google.maps.Map(document.createElement('div'), {
+        center: { lat: 40.0583, lng: -74.1325 }, // Brick, NJ coords
+        zoom: 15
+      });
+      fetchReviews();
+    }
 
     async function fetchReviews() {
       try {
-        const response = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${PLACE_ID}&fields=reviews&key=${API_KEY}`);
-        const data = await response.json();
-        if (data.status === 'OK' && data.result.reviews) {
-          reviews = data.result.reviews.slice(0, 5); // Limit to 5 latest
-          if (reviews.length > 0) {
-            displayReview(0);
-            startCycling();
+        const service = new google.maps.places.PlacesService(map);
+        const request = {
+          placeId: PLACE_ID,
+          fields: ['reviews']
+        };
+        service.getDetails(request, (place, status) => {
+          console.log('PlacesService Response Status:', status);
+          console.log('Place Data:', place);
+          if (status === google.maps.places.PlacesServiceStatus.OK && place.reviews) {
+            reviews = place.reviews.slice(0, 5); // Limit to 5 latest
+            if (reviews.length > 0) {
+              displayReview(0);
+              startCycling();
+            } else {
+              showNoReviews('No reviews found for this place.');
+            }
           } else {
-            showNoReviews();
+            console.error('PlacesService Error:', status);
+            showNoReviews(`Error: ${status}`);
           }
-        } else {
-          console.error('API Error:', data.status);
-          showNoReviews();
-        }
+        });
       } catch (error) {
         console.error('Fetch Error:', error);
-        showNoReviews();
+        showNoReviews('Error fetching reviews. Check console.');
       }
     }
 
     function displayReview(index) {
       const review = reviews[index];
       const display = document.getElementById('review-display');
-      const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating); // Unicode stars
-
+      const stars = '★'.repeat(Math.round(review.rating)) + '☆'.repeat(5 - Math.round(review.rating)); // Unicode stars
       display.innerHTML = `
         <div class="review-title">Client Review</div>
         <div class="stars">${stars}</div>
         <div class="review-text">${review.text ? review.text.substring(0, 200) + (review.text.length > 200 ? '...' : '') : 'No text available'}</div>
-        <div class="review-author">${review.author_name}</div>
+        <div class="review-author">${review.author_name || 'Anonymous'}</div>
         <div class="review-date">${new Date(review.time * 1000).toLocaleDateString()}</div>
       `;
-
-      // Fade transition
       display.classList.remove('active');
       setTimeout(() => display.classList.add('active'), 100);
     }
@@ -145,12 +165,16 @@
       }, CYCLE_INTERVAL);
     }
 
-    function showNoReviews() {
-      document.getElementById('review-display').innerHTML = '<div class="no-reviews">No reviews available. Check API key and Place ID.</div>';
+    function showNoReviews(message = 'No reviews available. Check API key and Place ID.') {
+      const display = document.getElementById('review-display');
+      display.innerHTML = `<div class="no-reviews">${message}</div>`;
+      if (message.includes('Error')) {
+        display.innerHTML += `<div class="error-message">See console for details.</div>`;
+      }
     }
 
-    // Load reviews on page load
-    fetchReviews();
+    // Initialize when Maps JS loads
+    window.initMap = initMap;
   </script>
 </body>
 </html>
