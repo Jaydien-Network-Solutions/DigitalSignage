@@ -27,7 +27,7 @@
       left: 50%;
       transform: translateX(-50%);
       width: 1800px;
-      height: 300px;
+      height: 250px;
       text-align: center;
       color: #003366;
       font-size: 108px;
@@ -37,7 +37,7 @@
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       word-break: break-word;
-      max-height: 200px;
+      /* Removed max-height to ensure text fits */
       overflow: hidden;
       z-index: 10;
     }
@@ -47,7 +47,7 @@
       left: 50%;
       transform: translate(-50%, -50%);
       width: 1600px;
-      height: 1600px;
+      height: 1800px;
       text-align: center;
       display: flex;
       justify-content: center;
@@ -170,7 +170,7 @@
             placeData = place;
             if (place.reviews) {
               reviews = place.reviews.slice(0, 5);
-              console.log('Fetched Reviews:', reviews.map(r => ({ author: r.author_name, time: r.time }))); // Debug with time
+              console.log('Fetched Reviews:', reviews.map(r => ({ author: r.author_name, time: r.time })));
               if (reviews.length > 0) {
                 displayReview(0);
                 startCycling();
@@ -197,12 +197,6 @@
       const stars = '★'.repeat(Math.round(review.rating)) + '☆'.repeat(5 - Math.round(review.rating));
       const totalReviews = placeData.user_ratings_total || 'N/A';
       const avgRating = placeData.rating ? placeData.rating.toFixed(1) : 'N/A';
-      const reviewTimes = reviews.map(r => r.time && typeof r.time === 'number' && r.time > 0 ? r.time : null).filter(time => time !== null); // Stricter filter
-      const reviewDates = reviewTimes.map(time => new Date(time * 1000)).filter(date => !isNaN(date.getTime())); // Use getTime() for stricter NaN check
-      console.log('Review Times:', reviewTimes);
-      console.log('Review Dates:', reviewDates);
-      const oldestReview = reviewDates.length > 0 ? Math.min(...reviewDates).toLocaleDateString() : 'N/A';
-      const newestReview = reviewDates.length > 0 ? Math.max(...reviewDates).toLocaleDateString() : 'N/A';
       const distribution = estimateRatingDistribution(totalReviews, avgRating);
       display.innerHTML = `
         <div class="review-header">
@@ -214,8 +208,7 @@
         <div class="review-text">${review.text || 'No text available'}</div>
         <div class="review-stats">
           Based on ${totalReviews} reviews, Avg. Rating: ${avgRating}/5<br>
-          Approx. Distribution: ${distribution}<br>
-          Reviews from ${oldestReview} to ${newestReview}
+          Approx. Distribution: ${distribution}
         </div>
       `;
       console.log('Displaying Review:', review);
