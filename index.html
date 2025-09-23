@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jaydien Network Solutions Reviews</title>
-  <!-- Load Google Maps JS Library (client-side, CORS-safe) -->
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBx0z3cr0aK2dIMjQyGhdZqHxtNO6Tx3Xg&libraries=places"></script>
+  <!-- Load Google Maps JS Library with async for better performance -->
+  <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBx0z3cr0aK2dIMjQyGhdZqHxtNO6Tx3Xg&libraries=places&callback=initMap"></script>
   <style>
     body {
       margin: 0;
@@ -106,6 +106,7 @@
     let map; // Dummy map for PlacesService
 
     function initMap() {
+      console.log('initMap called'); // Debug initialization
       // Create a dummy invisible map to initialize PlacesService
       map = new google.maps.Map(document.createElement('div'), {
         center: { lat: 40.0583, lng: -74.1325 }, // Brick, NJ coords
@@ -122,8 +123,8 @@
           fields: ['reviews']
         };
         service.getDetails(request, (place, status) => {
-          console.log('PlacesService Response Status:', status);
-          console.log('Place Data:', place);
+          console.log('PlacesService Response Status:', status); // Debug status
+          console.log('Place Data:', place); // Debug full response
           if (status === google.maps.places.PlacesServiceStatus.OK && place.reviews) {
             reviews = place.reviews.slice(0, 5); // Limit to 5 latest
             if (reviews.length > 0) {
@@ -173,7 +174,7 @@
       }
     }
 
-    // Initialize when Maps JS loads
+    // Ensure initMap is called when Maps JS loads
     window.initMap = initMap;
   </script>
 </body>
