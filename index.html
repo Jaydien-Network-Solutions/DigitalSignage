@@ -29,7 +29,7 @@
       width: 1800px;
       height: 250px;
       text-align: center;
-      color: #003366;
+      color: #000000; /* Black */
       font-size: 108px;
       font-weight: 700;
       background-color: rgba(255, 255, 255, 0.7);
@@ -37,7 +37,6 @@
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       word-break: break-word;
-      /* Removed max-height to ensure text fits */
       overflow: hidden;
       z-index: 10;
     }
@@ -54,6 +53,41 @@
       align-items: center;
       overflow: hidden;
       background-color: rgba(255, 255, 255, 0.5);
+    }
+    #stats-div {
+      position: absolute;
+      top: 75%; /* Below trustindex-container */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1600px;
+      text-align: left;
+      color: #000000; /* Black */
+      font-size: 60px;
+      font-weight: 400;
+      background-color: rgba(255, 255, 255, 0.7);
+      padding: 10px 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+    #stats-div h1 {
+      font-size: 72px; /* 120% of 60px */
+      font-weight: 600;
+      margin: 0 0 10px 0;
+    }
+    .rating-line {
+      display: flex;
+      align-items: center;
+      margin: 5px 0;
+    }
+    .rating-text {
+      margin-right: 10px;
+      white-space: nowrap;
+    }
+    .rating-bar {
+      height: 20px;
+      background-color: #00FF00; /* Green */
+      border-radius: 5px;
     }
     .review-card {
       background: white;
@@ -115,6 +149,7 @@
       font-weight: 400;
       margin-top: 10px;
       text-align: left;
+      display: none; /* Hidden from review-card */
     }
     .no-reviews {
       color: #003366;
@@ -137,6 +172,7 @@
       <div class="no-reviews">Loading reviews...</div>
     </div>
   </div>
+  <div id="stats-div"></div>
 
   <script>
     const API_KEY = 'AIzaSyBx0z3cr0aK2dIMjQyGhdZqHxtNO6Tx3Xg';
@@ -173,6 +209,7 @@
               console.log('Fetched Reviews:', reviews.map(r => ({ author: r.author_name, time: r.time })));
               if (reviews.length > 0) {
                 displayReview(0);
+                updateStats();
                 startCycling();
               } else {
                 showNoReviews('No reviews found for this place.');
@@ -195,9 +232,6 @@
       const review = reviews[index];
       const display = document.getElementById('review-display');
       const stars = '★'.repeat(Math.round(review.rating)) + '☆'.repeat(5 - Math.round(review.rating));
-      const totalReviews = placeData.user_ratings_total || 'N/A';
-      const avgRating = placeData.rating ? placeData.rating.toFixed(1) : 'N/A';
-      const distribution = estimateRatingDistribution(totalReviews, avgRating);
       display.innerHTML = `
         <div class="review-header">
           <img src="${review.profile_photo_url}" alt="${review.author_name}'s photo" class="profile-photo">
@@ -206,10 +240,6 @@
         <div class="review-date">${new Date(review.time * 1000).toLocaleDateString()}</div>
         <div class="stars">${stars}</div>
         <div class="review-text">${review.text || 'No text available'}</div>
-        <div class="review-stats">
-          Based on ${totalReviews} reviews, Avg. Rating: ${avgRating}/5<br>
-          Approx. Distribution: ${distribution}
-        </div>
       `;
       console.log('Displaying Review:', review);
       display.classList.remove('active');
@@ -219,6 +249,22 @@
       }, 100);
     }
 
+    function updateStats() {
+      const statsDiv = document.getElementById('stats-div');
+      const totalReviews = placeData.user_ratings_total || 'N/A';
+      const avgRating = placeData.rating ? placeData.rating.toFixed(1) : 'N/A';
+      const distribution = estimateRatingDistribution(totalReviews, avgRating);
+      const ratings = distribution.match(/\d+/g); // Extract counts from distribution string
+      statsDiv.innerHTML = `
+        <h1>Ratings Breakdown</h1>
+        <div class="rating-line"><span class="rating-text">5★</span><div class="rating-bar" style="width: ${ratings ? (ratings[0] / totalReviews * 100) || 0 : 0}%;"></div><span class="rating-text">${ratings ? ratings[0] : 'N/A'}</span></div>
+        <div class="rating-line"><span class="rating-text">4★</span><div class="rating-bar" style="width: ${ratings ? (ratings[1] / totalReviews * 100) || 0 : 0}%;"></div><span class="rating-text">${ratings ? ratings[1] : 'N/A'}</span></div>
+        <div class="rating-line"><span class="rating-text">3★</span><div class="rating-bar" style="width: ${ratings ? (ratings[2] / totalReviews * 100) || 0 : 0}%;"></div><span class="rating-text">${ratings ? ratings[2] : 'N/A'}</span></div>
+        <div class="rating-line"><span class="rating-text">2★</span><div class="rating-bar" style="width: ${ratings ? (ratings[3] / totalReviews * 100) || 0 : 0}%;"></div><span class="rating-text">${ratings ? ratings[3] : 'N/A'}</span></div>
+        <div class="rating-line"><span class="rating-text">1★</span><div class="rating-bar" style="width: ${ratings ? (ratings[4] / totalReviews * 100) || 0 : 0}%;"></div><span class="rating-text">${ratings ? ratings[4] : 'N/A'}</span></div>
+      `;
+    }
+
     function startCycling() {
       setInterval(() => {
         const display = document.getElementById('review-display');
@@ -226,6 +272,7 @@
         setTimeout(() => {
           currentIndex = (currentIndex + 1) % reviews.length;
           displayReview(currentIndex);
+          updateStats();
         }, 500);
       }, CYCLE_INTERVAL);
     }
@@ -252,7 +299,7 @@
       const sum = ratings.reduce((a, b) => a + b, 0);
       if (sum !== total) {
         const diff = total - sum;
-        ratings[4] += diff;
+        ratings[4] += diff; // Adjust 5-star
       }
       return `5★: ${ratings[4]}, 4★: ${ratings[3]}, 3★: ${ratings[2]}, 2★: ${ratings[1]}, 1★: ${ratings[0]}`;
     }
