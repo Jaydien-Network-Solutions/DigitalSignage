@@ -24,18 +24,17 @@
     #header-div {
       position: absolute;
       top: 15%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 1700px; /* Adjusted to 1700px */
-      height: 350px; /* Adjusted to 300px */
+      left: 55%; /* Shifted right */
+      transform: translateX(-45%); /* Adjusted to compensate */
+      width: 1700px;
+      height: 400px; /* Increased to ensure all text is visible */
       text-align: center;
       color: #000000; /* Black */
       font-size: 116px;
       font-weight: 700;
-      background-color: rgba(255, 255, 255, 0.7);
+      background-color: transparent; /* Removed background */
       padding: 10px 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      /* Removed border-radius and box-shadow */
       word-break: break-word;
       overflow: hidden;
       z-index: 10;
@@ -57,9 +56,9 @@
     #stats-div {
       position: absolute;
       top: 75%; /* Below trustindex-container */
-      left: 50%;
-      transform: translateX(-50%);
-      width: 1200px; /* Adjusted to 1200px */
+      left: 10%; /* Left justified */
+      transform: translateX(0); /* Removed centering transform */
+      width: 1800px; /* Wider */
       text-align: left;
       color: #000000; /* Black */
       font-size: 60px;
@@ -86,7 +85,7 @@
     }
     .rating-bar {
       height: 20px;
-      background-color: #00FF00; /* Green */
+      background-color: #1A976A; /* Green */
       border-radius: 5px;
     }
     .overall-rating {
@@ -104,21 +103,7 @@
       color: #f6bb06; /* Yellow */
       margin-right: 5px;
     }
-    .star-partial {
-      position: relative;
-      overflow: hidden;
-      display: inline-block;
-    }
-    .star-partial .star-fill {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 0;
-      height: 100%;
-      background-color: #f6bb06; /* Yellow */
-      color: transparent;
-      overflow: hidden;
-    }
+    /* Removed .star-partial and .star-fill to eliminate partial star effect */
     .review-card {
       background: white;
       border-radius: 10px;
@@ -203,7 +188,6 @@
     </div>
   </div>
   <div id="stats-div"></div>
-
   <script>
     const API_KEY = 'AIzaSyBx0z3cr0aK2dIMjQyGhdZqHxtNO6Tx3Xg';
     const PLACE_ID = 'ChIJ4zvzQkiDwYkReyhlC33LZfs';
@@ -282,10 +266,9 @@
     function updateStats() {
       const statsDiv = document.getElementById('stats-div');
       const totalReviews = placeData.user_ratings_total || 'N/A';
-      const avgRating = placeData.rating ? placeData.rating.toFixed(1) : 'N/A';
+      const avgRating = placeData.rating ? Math.round(placeData.rating) : 'N/A'; // Round to integer for full stars
       const distribution = estimateRatingDistribution(totalReviews, avgRating);
       const ratings = distribution.match(/\d+/g); // Extract counts [5, 4, 3, 2, 1]
-      const decimal = avgRating !== 'N/A' ? (avgRating % 1) : 0; // Decimal part for partial star
       statsDiv.innerHTML = `
         <h1>Ratings Breakdown</h1>
         <div class="rating-line"><span class="rating-text">5★</span><div class="rating-bar" style="width: ${ratings ? (ratings[0] / totalReviews * 100) || 0 : 0}%;"></div><span class="rating-text">${ratings ? ratings[0] : 'N/A'}</span></div>
@@ -296,13 +279,7 @@
         <div class="overall-rating">
           <div class="overall-rating-text">${avgRating !== 'N/A' ? `${avgRating} EXCELLENT` : 'N/A'} <strong>EXCELLENT</strong></div>
           <div class="star-rating">
-            ${[1, 2, 3, 4].map(i => `<span class="star">★</span>`).join('')}
-            ${avgRating !== 'N/A' ? `
-              <span class="star-partial">
-                <span class="star">★</span>
-                <span class="star-fill" style="width: ${decimal * 100}%;"></span>
-              </span>
-            ` : '<span class="star">☆</span>'}
+            ${avgRating !== 'N/A' ? Array(Math.min(avgRating, 5)).fill().map((_, i) => `<span class="star">★</span>`).join('') : '<span class="star">☆</span>'}
           </div>
           <div>based out of ${totalReviews} reviews</div>
         </div>
