@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jaydien Network Solutions Reviews</title>
-  <!-- Load Google Maps JS Library with async for better performance -->
+  <!-- Load Google Maps JS Library with async and callback -->
   <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBx0z3cr0aK2dIMjQyGhdZqHxtNO6Tx3Xg&libraries=places&callback=initMap"></script>
   <style>
     body {
@@ -127,8 +127,9 @@
           console.log('Place Data:', place); // Debug full response
           if (status === google.maps.places.PlacesServiceStatus.OK && place.reviews) {
             reviews = place.reviews.slice(0, 5); // Limit to 5 latest
+            console.log('Fetched Reviews:', reviews); // Debug fetched reviews
             if (reviews.length > 0) {
-              displayReview(0);
+              displayReview(0); // Manually trigger first review
               startCycling();
             } else {
               showNoReviews('No reviews found for this place.');
@@ -155,8 +156,12 @@
         <div class="review-author">${review.author_name || 'Anonymous'}</div>
         <div class="review-date">${new Date(review.time * 1000).toLocaleDateString()}</div>
       `;
+      console.log('Displaying Review:', review); // Debug UI update
       display.classList.remove('active');
-      setTimeout(() => display.classList.add('active'), 100);
+      setTimeout(() => {
+        display.classList.add('active');
+        console.log('Review displayed at index:', index); // Debug transition
+      }, 100);
     }
 
     function startCycling() {
