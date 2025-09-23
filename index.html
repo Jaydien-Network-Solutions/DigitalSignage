@@ -197,7 +197,8 @@
       const stars = '★'.repeat(Math.round(review.rating)) + '☆'.repeat(5 - Math.round(review.rating));
       const totalReviews = placeData.user_ratings_total || 'N/A';
       const avgRating = placeData.rating ? placeData.rating.toFixed(1) : 'N/A';
-      const reviewDates = reviews.map(r => new Date(r.time * 1000)).filter(date => !isNaN(date)); // Filter out invalid dates
+      const reviewTimes = reviews.map(r => r.time || 0).filter(time => time > 0); // Ensure valid timestamps
+      const reviewDates = reviewTimes.map(time => new Date(time * 1000)).filter(date => !isNaN(date)); // Filter invalid dates
       const oldestReview = reviewDates.length > 0 ? Math.min(...reviewDates).toLocaleDateString() : 'N/A';
       const newestReview = reviewDates.length > 0 ? Math.max(...reviewDates).toLocaleDateString() : 'N/A';
       const distribution = estimateRatingDistribution(totalReviews, avgRating);
@@ -248,19 +249,16 @@
       const mean = parseFloat(avgRating);
       const stdDev = 1.0;
       const total = parseInt(totalReviews);
-
       for (let i = 1; i <= 5; i++) {
         const zScore = (i - mean) / stdDev;
         const probability = 1 / (stdDev * Math.sqrt(2 * Math.PI)) * Math.exp(-0.5 * zScore * zScore);
         ratings[i - 1] = Math.round(probability * total / 5);
       }
-
       const sum = ratings.reduce((a, b) => a + b, 0);
       if (sum !== total) {
         const diff = total - sum;
         ratings[4] += diff;
       }
-
       return `5★: ${ratings[4]}, 4★: ${ratings[3]}, 3★: ${ratings[2]}, 2★: ${ratings[1]}, 1★: ${ratings[0]}`;
     }
 
