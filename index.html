@@ -21,15 +21,23 @@
       background-color: #f0f0f0; /* Fallback */
       font-family: 'Poppins', sans-serif;
     }
-    #header-text {
+    #header-div {
       position: absolute;
-      top: 20%;
+      top: 15%; /* Adjusted for wider div */
       left: 50%;
       transform: translateX(-50%);
-      color: #003366; /* Navy */
-      font-size: 96px; /* Larger than review h1 */
-      font-weight: 700; /* Bold */
+      width: 1800px; /* Wider than review div */
       text-align: center;
+      color: #003366; /* Navy */
+      font-size: 108px; /* Larger than review h1 */
+      font-weight: 700; /* Bold */
+      background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white background */
+      padding: 10px 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+      word-break: break-word; /* Ensure text wraps */
+      max-height: 200px; /* Limit to 2 lines max */
+      overflow: hidden; /* Hide excess if any */
       z-index: 10;
     }
     #trustindex-container {
@@ -122,7 +130,7 @@
   </style>
 </head>
 <body>
-  <h1 id="header-text">What our customers are saying about Jaydien Network Solutions</h1>
+  <div id="header-div">What Our Customers Are Saying About Jaydien Network Solutions</div>
   <div id="trustindex-container">
     <div id="review-display" class="review-card">
       <div class="no-reviews">Loading reviews...</div>
