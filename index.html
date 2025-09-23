@@ -281,7 +281,7 @@
       const distribution = estimateRatingDistribution(totalReviews, avgRating);
       const ratings = distribution.match(/\d+/g); // Extract counts [5, 4, 3, 2, 1]
       statsDiv.innerHTML = `
-        <h1>Ratings Breakdown</h1>
+        <h1>Ratings Breakdown - based out of ${totalReviews} reviews</h1>
         <div class="rating-line"><span class="rating-text">5 star</span><div class="rating-bar" style="width: 100%;"><div class="fill" style="width: ${ratings ? (ratings[0] / totalReviews * 100) || 0 : 0}%;"></div></div><span class="rating-text">${ratings ? `${(ratings[0] / totalReviews * 100).toFixed(0)}% (${ratings[0]})` : 'N/A'}</span></div>
         <div class="rating-line"><span class="rating-text">4 star</span><div class="rating-bar" style="width: 100%;"><div class="fill" style="width: ${ratings ? (ratings[1] / totalReviews * 100) || 0 : 0}%;"></div></div><span class="rating-text">${ratings ? `${(ratings[1] / totalReviews * 100).toFixed(0)}% (${ratings[1]})` : 'N/A'}</span></div>
         <div class="rating-line"><span class="rating-text">3 star</span><div class="rating-bar" style="width: 100%;"><div class="fill" style="width: ${ratings ? (ratings[2] / totalReviews * 100) || 0 : 0}%;"></div></div><span class="rating-text">${ratings ? `${(ratings[2] / totalReviews * 100).toFixed(0)}% (${ratings[2]})` : 'N/A'}</span></div>
@@ -292,7 +292,6 @@
           <div class="star-rating">
             ${avgRating !== 'N/A' ? Array(Math.min(Math.round(avgRating), 5)).fill().map((_, i) => `<span class="star">★</span>`).join('') + Array(5 - Math.min(Math.round(avgRating), 5)).fill().map(() => `<span class="star">☆</span>`).join('') : '<span class="star">☆</span>'}
           </div>
-          <div>based out of ${totalReviews} reviews</div>
         </div>
       `;
     }
