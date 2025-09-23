@@ -23,7 +23,7 @@
     }
     #header-div {
       position: absolute;
-      top: 15%;
+      top: 10%; /* Moved higher */
       left: 55%; /* Shifted right */
       transform: translateX(-45%); /* Adjusted to compensate */
       width: 1700px;
@@ -46,16 +46,17 @@
       transform: translate(-50%, -50%); /* Centered vertically and horizontally */
       width: 1800px; /* Wider */
       height: 1800px;
+      max-height: 1800px; /* Static max height */
       text-align: center;
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
+      overflow: auto; /* Allow scrolling if content exceeds height */
       background-color: rgba(255, 255, 255, 0.5);
     }
     #stats-div {
       position: absolute;
-      top: 70%; /* Moved up slightly */
+      top: 72%; /* Moved down slightly */
       left: 10%; /* Left justified */
       transform: translateX(0); /* Removed centering transform */
       width: 1800px; /* Wider */
@@ -274,7 +275,7 @@
     function updateStats() {
       const statsDiv = document.getElementById('stats-div');
       const totalReviews = placeData.user_ratings_total || 'N/A';
-      const avgRating = placeData.rating ? Math.round(placeData.rating) : 'N/A'; // Round to integer for full stars
+      const avgRating = placeData.rating ? placeData.rating.toFixed(1) : 'N/A'; // Use original rating with decimal
       const distribution = estimateRatingDistribution(totalReviews, avgRating);
       const ratings = distribution.match(/\d+/g); // Extract counts [5, 4, 3, 2, 1]
       statsDiv.innerHTML = `
@@ -285,9 +286,9 @@
         <div class="rating-line"><span class="rating-text">2 star</span><div class="rating-bar"><div class="fill" style="width: ${ratings ? (ratings[3] / totalReviews * 100) || 0 : 0}%;"></div></div><span class="rating-text">${ratings ? `${(ratings[3] / totalReviews * 100).toFixed(0)}% (${ratings[3]})` : 'N/A'}</span></div>
         <div class="rating-line"><span class="rating-text">1 star</span><div class="rating-bar"><div class="fill" style="width: ${ratings ? (ratings[4] / totalReviews * 100) || 0 : 0}%;"></div></div><span class="rating-text">${ratings ? `${(ratings[4] / totalReviews * 100).toFixed(0)}% (${ratings[4]})` : 'N/A'}</span></div>
         <div class="overall-rating">
-          <div class="overall-rating-text">${avgRating !== 'N/A' ? `${avgRating} EXCELLENT` : 'N/A'} <strong>EXCELLENT</strong></div>
+          <div class="overall-rating-text">${avgRating !== 'N/A' ? `${avgRating} EXCELLENT rating` : 'N/A'}</div> <!-- Fixed text -->
           <div class="star-rating">
-            ${avgRating !== 'N/A' ? Array(Math.min(avgRating, 5)).fill().map((_, i) => `<span class="star">★</span>`).join('') + Array(5 - Math.min(avgRating, 5)).fill().map(() => `<span class="star">☆</span>`).join('') : '<span class="star">☆</span>'}
+            ${avgRating !== 'N/A' ? Array(Math.min(Math.round(avgRating), 5)).fill().map((_, i) => `<span class="star">★</span>`).join('') + Array(5 - Math.min(Math.round(avgRating), 5)).fill().map(() => `<span class="star">☆</span>`).join('') : '<span class="star">☆</span>'}
           </div>
           <div>based out of ${totalReviews} reviews</div>
         </div>
