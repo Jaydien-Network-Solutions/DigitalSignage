@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jaydien Network Solutions Reviews</title>
+  <!-- Load Google Fonts for Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <!-- Load Google Maps JS Library with async and callback -->
   <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBx0z3cr0aK2dIMjQyGhdZqHxtNO6Tx3Xg&libraries=places&callback=initMap"></script>
   <style>
@@ -17,7 +19,7 @@
       overflow: hidden;
       position: relative;
       background-color: #f0f0f0; /* Fallback */
-      font-family: Arial, sans-serif;
+      font-family: 'Poppins', sans-serif; /* Updated to Poppins */
     }
     #trustindex-container {
       position: absolute;
@@ -47,44 +49,55 @@
     .review-card.active {
       opacity: 1;
     }
-    .review-title {
+    .review-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .profile-photo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%; /* Circular shape */
+      object-fit: cover;
+      margin-right: 15px;
+    }
+    h1 {
       color: #003366; /* Navy */
       font-size: 32px;
-      font-weight: bold;
-      margin-bottom: 10px;
+      font-weight: 600; /* Medium-bold with Poppins */
+      margin: 0;
+    }
+    .review-date {
+      color: #666;
+      font-size: 20px;
+      font-weight: 400; /* Regular */
+      margin-top: 5px;
     }
     .stars {
       color: #FF6600; /* Orange */
       font-size: 28px;
-      margin-bottom: 10px;
+      font-weight: 500; /* Medium */
+      margin: 10px 0;
     }
     .review-text {
       color: #003366;
       font-size: 24px;
+      font-weight: 400; /* Regular */
       line-height: 1.4;
       margin-bottom: 10px;
       max-height: 300px;
       overflow: hidden;
     }
-    .review-author {
-      color: #003366;
-      font-size: 26px;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    .review-date {
-      color: #666;
-      font-size: 20px;
-      margin-bottom: 10px;
-    }
     .no-reviews {
       color: #003366;
       font-size: 28px;
+      font-weight: 500; /* Medium */
       text-align: center;
     }
     .error-message {
       color: red;
       font-size: 24px;
+      font-weight: 500; /* Medium */
       text-align: center;
     }
   </style>
@@ -150,11 +163,13 @@
       const display = document.getElementById('review-display');
       const stars = '★'.repeat(Math.round(review.rating)) + '☆'.repeat(5 - Math.round(review.rating)); // Unicode stars
       display.innerHTML = `
-        <div class="review-title">Client Review</div>
+        <div class="review-header">
+          <img src="${review.profile_photo_url}" alt="${review.author_name}'s photo" class="profile-photo">
+          <h1>${review.author_name || 'Anonymous'}</h1>
+        </div>
+        <div class="review-date">${new Date(review.time * 1000).toLocaleDateString()}</div>
         <div class="stars">${stars}</div>
         <div class="review-text">${review.text ? review.text.substring(0, 200) + (review.text.length > 200 ? '...' : '') : 'No text available'}</div>
-        <div class="review-author">${review.author_name || 'Anonymous'}</div>
-        <div class="review-date">${new Date(review.time * 1000).toLocaleDateString()}</div>
       `;
       console.log('Displaying Review:', review); // Debug UI update
       display.classList.remove('active');
