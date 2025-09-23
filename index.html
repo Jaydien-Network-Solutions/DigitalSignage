@@ -27,7 +27,7 @@
       left: 55%; /* Shifted right */
       transform: translateX(-45%); /* Adjusted to compensate */
       width: 1700px;
-      height: 400px; /* Increased to ensure all text is visible */
+      height: 450px; /* Increased to ensure all text is visible */
       text-align: center;
       color: #000000; /* Black */
       font-size: 116px;
@@ -42,9 +42,9 @@
     #trustindex-container {
       position: absolute;
       top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 1600px;
+      left: 10%; /* Left justified */
+      transform: translateX(0); /* Removed centering transform */
+      width: 1800px; /* Wider */
       height: 1800px;
       text-align: center;
       display: flex;
@@ -55,7 +55,7 @@
     }
     #stats-div {
       position: absolute;
-      top: 75%; /* Below trustindex-container */
+      top: 70%; /* Moved up slightly */
       left: 10%; /* Left justified */
       transform: translateX(0); /* Removed centering transform */
       width: 1800px; /* Wider */
@@ -85,8 +85,17 @@
     }
     .rating-bar {
       height: 20px;
-      background-color: #1A976A; /* Green */
       border-radius: 5px;
+      background-color: #eceeef; /* Unfilled part */
+      position: relative;
+    }
+    .rating-bar .fill {
+      height: 100%;
+      background-color: #1a976a; /* Green */
+      border-radius: 5px;
+      position: absolute;
+      top: 0;
+      left: 0;
     }
     .overall-rating {
       margin-top: 15px;
@@ -103,7 +112,6 @@
       color: #f6bb06; /* Yellow */
       margin-right: 5px;
     }
-    /* Removed .star-partial and .star-fill to eliminate partial star effect */
     .review-card {
       background: white;
       border-radius: 10px;
@@ -271,15 +279,15 @@
       const ratings = distribution.match(/\d+/g); // Extract counts [5, 4, 3, 2, 1]
       statsDiv.innerHTML = `
         <h1>Ratings Breakdown</h1>
-        <div class="rating-line"><span class="rating-text">5★</span><div class="rating-bar" style="width: ${ratings ? (ratings[0] / totalReviews * 100) || 0 : 0}%;"></div><span class="rating-text">${ratings ? ratings[0] : 'N/A'}</span></div>
-        <div class="rating-line"><span class="rating-text">4★</span><div class="rating-bar" style="width: ${ratings ? (ratings[1] / totalReviews * 100) || 0 : 0}%;"></div><span class="rating-text">${ratings ? ratings[1] : 'N/A'}</span></div>
-        <div class="rating-line"><span class="rating-text">3★</span><div class="rating-bar" style="width: ${ratings ? (ratings[2] / totalReviews * 100) || 0 : 0}%;"></div><span class="rating-text">${ratings ? ratings[2] : 'N/A'}</span></div>
-        <div class="rating-line"><span class="rating-text">2★</span><div class="rating-bar" style="width: ${ratings ? (ratings[3] / totalReviews * 100) || 0 : 0}%;"></div><span class="rating-text">${ratings ? ratings[3] : 'N/A'}</span></div>
-        <div class="rating-line"><span class="rating-text">1★</span><div class="rating-bar" style="width: ${ratings ? (ratings[4] / totalReviews * 100) || 0 : 0}%;"></div><span class="rating-text">${ratings ? ratings[4] : 'N/A'}</span></div>
+        <div class="rating-line"><span class="rating-text">5 star</span><div class="rating-bar"><div class="fill" style="width: ${ratings ? (ratings[0] / totalReviews * 100) || 0 : 0}%;"></div></div><span class="rating-text">${ratings ? `${(ratings[0] / totalReviews * 100).toFixed(0)}% (${ratings[0]})` : 'N/A'}</span></div>
+        <div class="rating-line"><span class="rating-text">4 star</span><div class="rating-bar"><div class="fill" style="width: ${ratings ? (ratings[1] / totalReviews * 100) || 0 : 0}%;"></div></div><span class="rating-text">${ratings ? `${(ratings[1] / totalReviews * 100).toFixed(0)}% (${ratings[1]})` : 'N/A'}</span></div>
+        <div class="rating-line"><span class="rating-text">3 star</span><div class="rating-bar"><div class="fill" style="width: ${ratings ? (ratings[2] / totalReviews * 100) || 0 : 0}%;"></div></div><span class="rating-text">${ratings ? `${(ratings[2] / totalReviews * 100).toFixed(0)}% (${ratings[2]})` : 'N/A'}</span></div>
+        <div class="rating-line"><span class="rating-text">2 star</span><div class="rating-bar"><div class="fill" style="width: ${ratings ? (ratings[3] / totalReviews * 100) || 0 : 0}%;"></div></div><span class="rating-text">${ratings ? `${(ratings[3] / totalReviews * 100).toFixed(0)}% (${ratings[3]})` : 'N/A'}</span></div>
+        <div class="rating-line"><span class="rating-text">1 star</span><div class="rating-bar"><div class="fill" style="width: ${ratings ? (ratings[4] / totalReviews * 100) || 0 : 0}%;"></div></div><span class="rating-text">${ratings ? `${(ratings[4] / totalReviews * 100).toFixed(0)}% (${ratings[4]})` : 'N/A'}</span></div>
         <div class="overall-rating">
           <div class="overall-rating-text">${avgRating !== 'N/A' ? `${avgRating} EXCELLENT` : 'N/A'} <strong>EXCELLENT</strong></div>
           <div class="star-rating">
-            ${avgRating !== 'N/A' ? Array(Math.min(avgRating, 5)).fill().map((_, i) => `<span class="star">★</span>`).join('') : '<span class="star">☆</span>'}
+            ${avgRating !== 'N/A' ? Array(Math.min(avgRating, 5)).fill().map((_, i) => `<span class="star">★</span>`).join('') + Array(5 - Math.min(avgRating, 5)).fill().map(() => `<span class="star">☆</span>`).join('') : '<span class="star">☆</span>'}
           </div>
           <div>based out of ${totalReviews} reviews</div>
         </div>
@@ -322,7 +330,7 @@
         const diff = total - sum;
         ratings[4] += diff;
       }
-      return `5★: ${ratings[4]}, 4★: ${ratings[3]}, 3★: ${ratings[2]}, 2★: ${ratings[1]}, 1★: ${ratings[0]}`;
+      return `5 star: ${ratings[4]}, 4 star: ${ratings[3]}, 3 star: ${ratings[2]}, 2 star: ${ratings[1]}, 1 star: ${ratings[0]}`;
     }
 
     window.initMap = initMap;
