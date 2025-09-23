@@ -170,7 +170,7 @@
             placeData = place;
             if (place.reviews) {
               reviews = place.reviews.slice(0, 5);
-              console.log('Fetched Reviews:', reviews);
+              console.log('Fetched Reviews:', reviews.map(r => ({ author: r.author_name, time: r.time }))); // Debug with time
               if (reviews.length > 0) {
                 displayReview(0);
                 startCycling();
@@ -197,8 +197,10 @@
       const stars = '★'.repeat(Math.round(review.rating)) + '☆'.repeat(5 - Math.round(review.rating));
       const totalReviews = placeData.user_ratings_total || 'N/A';
       const avgRating = placeData.rating ? placeData.rating.toFixed(1) : 'N/A';
-      const reviewTimes = reviews.map(r => r.time || 0).filter(time => time > 0); // Ensure valid timestamps
-      const reviewDates = reviewTimes.map(time => new Date(time * 1000)).filter(date => !isNaN(date)); // Filter invalid dates
+      const reviewTimes = reviews.map(r => r.time && typeof r.time === 'number' && r.time > 0 ? r.time : null).filter(time => time !== null); // Stricter filter
+      const reviewDates = reviewTimes.map(time => new Date(time * 1000)).filter(date => !isNaN(date.getTime())); // Use getTime() for stricter NaN check
+      console.log('Review Times:', reviewTimes);
+      console.log('Review Dates:', reviewDates);
       const oldestReview = reviewDates.length > 0 ? Math.min(...reviewDates).toLocaleDateString() : 'N/A';
       const newestReview = reviewDates.length > 0 ? Math.max(...reviewDates).toLocaleDateString() : 'N/A';
       const distribution = estimateRatingDistribution(totalReviews, avgRating);
