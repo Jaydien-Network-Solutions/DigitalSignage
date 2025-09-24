@@ -106,4 +106,59 @@
       try {
         const response = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${PLACE_ID}&fields=reviews&key=${API_KEY}`);
         const data = await response.json();
-        console.log('API Response:', data); // Log full
+        console.log('API Response:', data); // Log full response for debugging
+        if (data.status === 'OK' && data.result && data.result.reviews) {
+          reviews = data.result.reviews.slice(0, 5); // Limit to 5 latest
+          if (reviews.length > 0) {
+            displayReview(0);
+            startCycling();
+          } else {
+            showNoReviews('No reviews found for this place.');
+          }
+        } else {
+          console.error('API Error:', data.status, data.error_message || 'No error details');
+          showNoReviews(`API Error: ${data.status}`);
+        }
+      } catch (error) {
+        console.error('Fetch Error:', error);
+        showNoReviews('Error fetching reviews. Check console.');
+      }
+    }
+
+    function displayReview(index) {
+      const review = reviews[index];
+      const display = document.getElementById('review-display');
+      const stars = '★'.repeat(Math.round(review.rating)) + '☆'.repeat(5 - Math.round(review.rating)); // Unicode stars
+      let reviewText = review.text ? review.text : 'No text available';
+      if (reviewText.length > 200) reviewText = reviewText.substring(0, 200) + '...';
+      display.innerHTML = `
+        <div class="review-title">Client Review</div>
+        <div class="stars">${stars}</div>
+        <div class="review-text">${reviewText}</div>
+        <div class="review-author">${review.author_name || 'Anonymous'}</div>
+        <div class="review-date">${new Date(review.time * 1000).toLocaleDateString()}</div>
+      `;
+      display.classList.remove('active');
+      setTimeout(() => display.classList.add('active'), 100);
+    }
+
+    function startCycling() {
+      setInterval(() => {
+        currentIndex = (currentIndex + 1) % reviews.length;
+        displayReview(currentIndex);
+      }, CYCLE_INTERVAL);
+    }
+
+    function showNoReviews(message = 'No reviews available. Check API key and Place ID.') {
+      const display = document.getElementById('review-display');
+      display.innerHTML = `<div class="no-reviews">${message}</div>`;
+      if (message.includes('Error')) {
+        display.innerHTML += `<div class="error-message">See console for details.</div>`;
+      }
+    }
+
+    // Load reviews with a delay for debugging
+    window.onload = () => setTimeout(fetchReviews, 1000); // Delay to ensure DOM is ready
+  </script>
+</body>
+</html>
