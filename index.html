@@ -204,7 +204,7 @@
   <script>
     const API_KEY = 'AIzaSyBx0z3cr0aK2dIMjQyGhdZqHxtNO6Tx3Xg';
     const PLACE_ID = 'ChIJ4zvzQkiDwYkReyhlC33LZfs';
-    const CYCLE_INTERVAL = 5000;
+    const CYCLE_INTERVAL = 8000; //Slower: 8 seconds
     let reviews = [];
     let currentIndex = 0;
     let map;
@@ -232,7 +232,7 @@
           if (status === google.maps.places.PlacesServiceStatus.OK) {
             placeData = place;
             if (place.reviews) {
-              reviews = place.reviews.slice(0, 5);
+              reviews = place.reviews.slice(0, 10); //This is how you adjsut the number of reviews displayed
               console.log('Fetched Reviews:', reviews.map(r => ({ author: r.author_name, time: r.time })));
               if (reviews.length > 0) {
                 displayReview(0);
