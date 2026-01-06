@@ -1,1 +1,11 @@
+name = "jaydien-google-reviews"
+main = "src/index.js"
+compatibility_date = "2026-01-01"
 
+[vars]
+# Non-secret config is fine here
+GBP_ACCOUNT_ID = "YOUR_ACCOUNT_ID"
+GBP_LOCATION_ID = "YOUR_LOCATION_ID"
+
+# Optional: restrict browser callers to your site origin
+ALLOWED_ORIGIN = "https://portal.jaydien.com"
