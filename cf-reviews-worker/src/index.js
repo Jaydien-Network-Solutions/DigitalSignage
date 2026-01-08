@@ -10,7 +10,9 @@ export default {
     if (url.pathname === "/reviews") {
       try {
         const limit = clampInt(url.searchParams.get("limit") ?? "10", 1, 50);
-        const reviews = await fetchLatestReviews(env, limit);
+        const accountId = url.searchParams.get("accountId") || env.GBP_ACCOUNT_ID;
+        const locationId = url.searchParams.get("locationId") || env.GBP_LOCATION_ID;
+        const reviews = await fetchLatestReviews(env, limit, accountId, locationId);
 
         return corsResponse(
           JSON.stringify({ reviews }),
@@ -52,10 +54,14 @@ function clampInt(value, min, max) {
   return Math.max(min, Math.min(max, Math.trunc(n)));
 }
 
-async function fetchLatestReviews(env, limit) {
+async function fetchLatestReviews(env, limit, accountId, locationId) {
   const accessToken = await getAccessToken(env);
 
-  const base = `https://mybusiness.googleapis.com/v4/accounts/${env.GBP_ACCOUNT_ID}/locations/${env.GBP_LOCATION_ID}/reviews`;
+  if (!accountId || !locationId || accountId.includes("YOUR_") || locationId.includes("YOUR_")) {
+    throw new Error("Missing/placeholder accountId or locationId. Provide ?accountId=...&locationId=... or set Worker vars.");
+  }
+
+  const base = `https://mybusiness.googleapis.com/v4/accounts/${accountId}/locations/${locationId}/reviews`;
 
   let pageToken = null;
   const all = [];
