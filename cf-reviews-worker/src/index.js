@@ -55,7 +55,6 @@ function clampInt(value, min, max) {
 async function fetchLatestReviews(env, limit) {
   const accessToken = await getAccessToken(env);
 
-  // GBP reviews list: accounts.locations.reviews.list :contentReference[oaicite:2]{index=2}
   const base = `https://mybusiness.googleapis.com/v4/accounts/${env.GBP_ACCOUNT_ID}/locations/${env.GBP_LOCATION_ID}/reviews`;
 
   let pageToken = null;
@@ -108,14 +107,12 @@ async function fetchLatestReviews(env, limit) {
 }
 
 function starEnumToNumber(starRating) {
-  // Google returns enums like "FIVE" :contentReference[oaicite:3]{index=3}
   const map = { ONE: 1, TWO: 2, THREE: 3, FOUR: 4, FIVE: 5 };
   return map[starRating] || 0;
 }
 
 async function getAccessToken(env) {
   // Store these as secrets in Cloudflare (never in GitHub / HTML)
-  // Cloudflare recommends secrets for sensitive values. :contentReference[oaicite:4]{index=4}
   const clientId = env.GOOGLE_OAUTH_CLIENT_ID;
   const clientSecret = env.GOOGLE_OAUTH_CLIENT_SECRET;
   const refreshToken = env.GOOGLE_OAUTH_REFRESH_TOKEN;
