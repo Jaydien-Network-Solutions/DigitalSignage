@@ -8,4 +8,4 @@ GBP_ACCOUNT_ID = "YOUR_ACCOUNT_ID"
 GBP_LOCATION_ID = "YOUR_LOCATION_ID"
 
 # Optional: restrict browser callers to your site origin
-ALLOWED_ORIGIN = "https://portal.jaydien.com"
+ALLOWED_ORIGIN = "https://jaydien-network-solutions.github.io"
